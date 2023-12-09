@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="todolist.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <span class="navbar-toggle" onclick="openNav()">☰ </span>
+    </div>
+
+    <div id="myNavbar" class="navbar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="blog.html">Home</a>
+        <a href="recipe.html">Recipes</a>
+        <a href="todo.html">To Do List</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <div class="container">
+    <div class="todo-app">
+    <h2><img src="dolo.gif" alt="Icon"> To-Do List</h2>
+    <div class="row">
+    <input type="text" id="input_text" placeholder="Add a new task">
+    <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul class="list" id="taskList"></ul>
+    </div>
+    <script src = "script.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("input_text").focus();
+            reloadTasks();
+        });
+
+        var input_text = document.getElementById("input_text");
+
+        function addTask() {
+            var taskList = document.getElementById("taskList");
+            if (input_text.value === null || input_text.value.trim() === "") {
+                alert("Please Enter");
+            } else {
+                var listItem = document.createElement("li");
+                listItem.innerHTML =
+                    '<input type="checkbox" id="check"> ' + '<div class="indent"></div>' +
+                    input_text.value +
+                    '<button class="remove-button" onclick="removeTask(this)">Remove</button> ' +
+                    '<button class="update-button" onclick="updateTask(this)">Update</button> ';
+                var checkbox = listItem.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', toggleDone);
+                taskList.appendChild(listItem);
+                input_text.value = "";
+                input_text.focus();
+                storeTasks();
+            }
+        }
+
+        function removeTask(button) {
+            var taskList = document.getElementById("taskList");
+            var listItem = button.parentNode;
+            var checkbox = listItem.querySelector('input[type="checkbox"]');
+            if (!checkbox.checked) {
+                taskList.removeChild(listItem);
+            } else {
+                alert("Cannot remove a completed task.");
+            }
+            storeTasks();
+        }
+
+        function updateTask(button) {
+            var listItem = button.parentNode;
+            var cur = listItem.textContent.trim();
+            var newText = prompt("Update task:", cur);
+            if (newText !== null) {
+                var checkbox = listItem.querySelector('input[type="checkbox"]');
+                if (!checkbox.checked) {
+                    listItem.textContent = newText.trim();
+                    var updatedContent = '<input type="checkbox"> ' + newText.trim() +
+                        '<button class="remove-button" onclick="removeTask(this)">Remove</button>' +
+                        '<button class="update-button" onclick="updateTask(this)">Update</button>';
+                    listItem.innerHTML = updatedContent;
+                    var updatedCheckbox = listItem.querySelector('input[type="checkbox"]');
+                    updatedCheckbox.addEventListener('change', toggleDone);
+                    input_text.value = "";
+                    input_text.focus();
+                    storeTasks();
+                } else {
+                    alert("Cannot update a completed task.");
+                }
+            }
+        }
+
+        function toggleDone() {
+            // Add your toggleDone logic here if needed
+        }
+
+        function storeTasks() {
+            var taskList = document.getElementById("taskList");
+            var tasks = Array.from(taskList.children).map(li => li.innerHTML);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function reloadTasks() {
+            var taskList = document.getElementById("taskList");
+            var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+            tasks.forEach(taskText => {
+                var li = document.createElement("li");
+                li.innerHTML = taskText;
+                taskList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>

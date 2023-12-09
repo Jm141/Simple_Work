@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Zone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="todolist.css">
+    <style>
+    
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Recipe Zone</h1>
+    </header>
+    
+    
+    <div id="main">
+        
+        <span class="navbar-toggle" onclick="openNav()"> </span>
+    </div>
+
+    <div id="myNavbar" class="navbar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="blog.html">Home</a>
+        <a href="recipe.html">Recipes</a>
+        <button id="todoButton" onclick="openTodoList()"><img src="dolo.gif" alt="ToDoList"><h4>To-Do List</h4></button>
+        <a href="#">Contact</a>
+    </div>
+
+    <div id="main1">
+        <h1>Welcome to Recipe Zone</h1>
+        <img src="chef.gif" alt="chef.gif" class="gif">
+        <p>Discover a world of delightful homemade recipes that will satisfy your taste buds and inspire your culinary journey.</p>
+        <p>Why Cook?</p>
+        <ul>
+            <li>Enjoy the pleasure of creating delicious meals from scratch.</li>
+           
+            <li>Bring family and friends together through shared meals.</li>
+            <li>Explore diverse cuisines and expand your cooking skills.</li>
+        </ul>
+        <a href="recipe.html"><button type="button">Explore Recipes</button></a>
+
+       
+        
+    </div>
+
+    
+    
+        <!-- Table for images -->
+        <table class="image-table">
+            <tr>
+                <td id="image-container-1"></td>
+                <td id="image-container-2"></td>
+                <td id="image-container-3"></td>
+            </tr>
+        </table>
+
+    <script src="script.js"></script>
+    <script src="ist.js"></script>
+    <script>
+        function openTodoList() {
+            document.getElementById("todoContainer").style.display = "block";
+        }
+
+        function closeTodoList() {
+            document.getElementById("todoContainer").style.display = "none";
+        }
+
+        const unsplashAccessKey = 'ekQtBapwBvm4O9IQH77Cs8yeUPaTvvYgirjySLiPhgI';
+
+            async function fetchRandomFoodImage() {
+                const response = await fetch(`https://api.unsplash.com/photos/random?query=food&client_id=${unsplashAccessKey}`);
+                const data = await response.json();
+                return data.urls.regular;
+            }
+
+            async function addRandomFoodImage(containerId) {
+                const imageContainer = document.getElementById(containerId);
+                const imageUrl = await fetchRandomFoodImage();
+
+                const img = document.createElement('img');
+                img.src = imageUrl;
+
+                imageContainer.appendChild(img);
+            }
+
+            // Add random food images to each container
+            addRandomFoodImage('image-container-1');
+            addRandomFoodImage('image-container-2');
+            addRandomFoodImage('image-container-3');
+        
+    </script>
+</body>
+
+</html>
